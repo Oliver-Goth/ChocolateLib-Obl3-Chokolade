@@ -2,14 +2,25 @@
 {
     public class EasterEgg
     {
-        public int ProductNO { get; set; }
+        // Properties
+        public int ProductNo { get; set; }
         public string ChocolateType { get; set; }
-        public int Price { get; set; }
+        public decimal Price { get; set; }
         public int InStock { get; set; }
 
+        // Constructor (optional)
+        public EasterEgg(int productNo, string chocolateType, decimal price, int inStock)
+        {
+            ProductNo = productNo;
+            ChocolateType = chocolateType;
+            Price = price;
+            InStock = inStock;
+        }
+
+        // ToString method override
         public override string ToString()
         {
-            return "Product Number: " + ProductNO + ", Type: " + ChocolateType + ", Price: " + Price + ", In stock: " + InStock;
+            return $"ProductNo: {ProductNo}, ChocolateType: {ChocolateType}, Price: {Price:C}, InStock: {InStock}";
         }
     }
 }

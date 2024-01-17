@@ -9,37 +9,56 @@ namespace ChocolateLib
 {
     public class EasterEggsRepository
     {
-        private int _productNo = 1;
-        private readonly List<EasterEgg> easterEggs = new List<EasterEgg>();
+        private List<EasterEgg> eggs;
 
         public EasterEggsRepository()
         {
-            easterEggs.Add(new EasterEgg() { ProductNO = _productNo++, ChocolateType = "Hvid", Price = 100, InStock = 1000 });
-            easterEggs.Add(new EasterEgg() { ProductNO = _productNo++, ChocolateType = "Lys", Price = 200, InStock = 1000 });
-            easterEggs.Add(new EasterEgg() { ProductNO = _productNo++, ChocolateType = "Mørk", Price = 200, InStock = 1000 });
+            eggs = new List<EasterEgg>();
+            // Tilføj mindst 3 objekter af EasterEgg til listen
+            eggs.Add(new EasterEgg(1, "Mørk", 10.99m, 50));
+            eggs.Add(new EasterEgg(2, "Mælke", 8.99m, 30));
+            eggs.Add(new EasterEgg(3, "Hvid", 12.99m, 20));
         }
 
-        public EasterEgg GetAll()
+        // Get alle påskeæg
+        public List<EasterEgg> Get()
         {
-            return new List<EasterEgg>(easterEggs);
+            return eggs;
         }
 
-        public EasterEgg? GetByProductNo(int productNo)
+        // Get påskeæg baseret på produkt nummer
+        public EasterEgg GetByProductNo(int productNo)
         {
-            return easterEggs.FirstOrDefault(e => e.ProductNO == productNo);
-        }
+            EasterEgg egg = eggs.FirstOrDefault(e => e.ProductNo == productNo);
 
-        public void Update(EasterEgg easterEgg, int productNo)
-        {
-            EasterEgg? ee = GetByProductNo(productNo);
-            if (ee == null)
+            if (egg == null)
             {
-                throw new ArgumentOutOfRangeException("Easteregg is not found");
+                throw new ArgumentException($"Påskeæg med produkt nummer {productNo} blev ikke fundet.");
             }
-            ee.ProductNO = easterEgg.ProductNO;
-            ee.ChocolateType = easterEgg.ChocolateType;
-            ee.Price = easterEgg.Price;
-            ee.InStock = easterEgg.InStock;
+
+            return egg;
+        }
+
+        // Get påskeæg med lav lagerbeholdning
+        public List<EasterEgg> GetLowStock(int stockLevel)
+        {
+            return eggs.Where(e => e.InStock <= stockLevel).ToList();
+        }
+
+        // Opdater påskeæg
+        public void Update(EasterEgg egg)
+        {
+            EasterEgg existingEgg = eggs.FirstOrDefault(e => e.ProductNo == egg.ProductNo);
+
+            if (existingEgg == null)
+            {
+                throw new ArgumentException($"Påskeæg med produkt nummer {egg.ProductNo} blev ikke fundet.");
+            }
+
+            // Opdater properties
+            existingEgg.ChocolateType = egg.ChocolateType;
+            existingEgg.Price = egg.Price;
+            existingEgg.InStock = egg.InStock;
         }
     }
 }
